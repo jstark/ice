@@ -3,14 +3,18 @@ package ice.pascal.frontend
 import scala.collection.mutable.{ArrayBuffer, HashSet, HashMap}
 import ice.frontend.TokenType
 
-trait  Reserved {
+trait  Reserved { self: TokenType =>
   val name: String
-  ReservedToken.append(name)
+  ReservedToken.append(name, this)
 }
 
 object ReservedToken {
-  private var reserved_ = new HashSet[String]
-  def append(tokenName: String) = reserved_ += tokenName
+  private var reserved_ = new HashMap[String, TokenType]
+  def append(tokenName: String, tokenType: TokenType) = {
+    reserved_ += (tokenName -> tokenType)
+  }
+  def contains(tokenName: String) = reserved_.contains(tokenName)
+  def valueOf(tokenName: String) = reserved_(tokenName)
 }
 
 trait Special { self: TokenType => 

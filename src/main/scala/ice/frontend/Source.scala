@@ -47,6 +47,14 @@ class Source(reader: BufferedSource) extends MessageProducer {
     if (nextPos < lineText_.size) lineText_.charAt(nextPos) else Source.EndOfLine 
     
   }
+
+  def readWhile(f: Char => Boolean): List[Char] = {
+    val currChar = currentChar()
+    if (f(currChar)) {
+      nextChar()
+      currChar :: readWhile(f)
+    } else Nil
+  }
   
   private def readNextLine() {
     lineText_ = if (lineIterator_.hasNext) lineIterator_.next else null
