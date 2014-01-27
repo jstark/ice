@@ -26,6 +26,8 @@ object SpecialToken {
     private var special_ = new HashMap[String, TokenType]
     def append(tokenName: String, tokenType: TokenType) = 
         special_ += (tokenName -> tokenType)
+    def contains(tokenName: String) = special_.contains(tokenName)
+    def valueOf(tokenName: String) = special_(tokenName)
 }
 
 class PascalTokenType1(val name: String) extends TokenType

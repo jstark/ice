@@ -6,12 +6,19 @@ class Token(source: Source) {
 	val lineNumber = source.currentLine
 	val position = source.currentPosition
 	
-	val (lexeme, mtype, value) = extract() /* implement in subclasses */
+	var lexeme_ : String    = _
+	var ttype_  : TokenType = _
+	var tvalue_ : AnyRef    = _
 	
-	protected def extract(): (String, TokenType, AnyRef) = {
-	  val text = source.currentChar().toString
+	def lexeme = lexeme_
+	def ttype = ttype_
+	def tvalue = tvalue_
+	
+	extract() /* implement in subclasses */
+	
+	protected def extract() {
+	  lexeme_ = source.currentChar().toString
 	  source.nextChar()
-	  (text, null, null)
 	}
 }
 
