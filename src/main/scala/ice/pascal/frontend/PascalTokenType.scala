@@ -18,88 +18,97 @@ object ReservedToken {
 }
 
 trait Special { self: TokenType => 
-  val name: String
-  SpecialToken.append(name, this)
+  val special: String
+  SpecialToken.append(special, this)
 }
 
 object SpecialToken {
     private var special_ = new HashMap[String, TokenType]
-    def append(tokenName: String, tokenType: TokenType) = 
-        special_ += (tokenName -> tokenType)
+    def append(tokenName: String, tokenType: TokenType) = {
+      special_ += (tokenName -> tokenType)
+    }
     def contains(tokenName: String) = special_.contains(tokenName)
     def valueOf(tokenName: String) = special_(tokenName)
 }
 
-class PascalTokenType1(val name: String) extends TokenType
-class PascalTokenType2(val name: String, val special: String) extends TokenType
+class PascalTokenType1(val name: String) extends TokenType {
+  override def toString = name
+}
 
-case object AND extends PascalTokenType1("AND") with Reserved
-case object ARRAY extends PascalTokenType1("ARRAY") with Reserved
-case object BEGIN extends PascalTokenType1("BEGIN") with Reserved
-case object CASE extends PascalTokenType1("CASE") with Reserved
-case object CONST extends PascalTokenType1("CONST") with Reserved
-case object DIV extends PascalTokenType1("DIV") with Reserved
-case object DO extends PascalTokenType1("DO") with Reserved
-case object DOWNTO extends PascalTokenType1("DOWNTO") with Reserved
-case object ELSE extends PascalTokenType1("ELSE") with Reserved
-case object END extends PascalTokenType1("END") with Reserved
-case object FILE extends PascalTokenType1("FILE") with Reserved
-case object FOR extends PascalTokenType1("FOR") with Reserved
-case object FUNCTION extends PascalTokenType1("FUNCTION") with Reserved
-case object GOTO extends PascalTokenType1("GOTO") with Reserved
-case object IF extends PascalTokenType1("IF") with Reserved
-case object IN extends PascalTokenType1("IN") with Reserved
-case object LABEL extends PascalTokenType1("LABEL") with Reserved
-case object MOD extends PascalTokenType1("MOD") with Reserved
-case object NIL extends PascalTokenType1("NIL") with Reserved
-case object NOT extends PascalTokenType1("NOT") with Reserved
-case object OF extends PascalTokenType1("OF") with Reserved
-case object OR extends PascalTokenType1("OR") with Reserved
-case object PACKED extends PascalTokenType1("PACKED") with Reserved
-case object PROCEDURE extends PascalTokenType1("PROCEDURE") with Reserved
-case object PROGRAM extends PascalTokenType1("PROGRAM") with Reserved
-case object RECORD extends PascalTokenType1("RECORD") with Reserved
-case object REPEAT extends PascalTokenType1("REPEAT") with Reserved
-case object SET extends PascalTokenType1("SET") with Reserved
-case object THEN extends PascalTokenType1("THEN") with Reserved
-case object TO extends PascalTokenType1("TO") with Reserved
-case object TYPE extends PascalTokenType1("TYPE") with Reserved
-case object UNTIL extends PascalTokenType1("UNTIL") with Reserved
-case object VAR extends PascalTokenType1("VAR") with Reserved
-case object WHILE extends PascalTokenType1("WHILE") with Reserved
-case object WITH extends PascalTokenType1("WITH") with Reserved
+class PascalTokenType2(val name: String, val special: String) extends TokenType {
+  override def toString = name
+}
+
+package object tokens {
+  def init() {}
+  val AND 		= new PascalTokenType1("AND") with Reserved
+  val ARRAY 	= new PascalTokenType1("ARRAY") with Reserved
+  val BEGIN 	= new PascalTokenType1("BEGIN") with Reserved
+  val CASE 		= new PascalTokenType1("CASE") with Reserved
+  val CONST 	= new PascalTokenType1("CONST") with Reserved
+  val DIV	 	= new PascalTokenType1("DIV") with Reserved
+  val DO 		= new PascalTokenType1("DO") with Reserved
+  val DOWNTO 	= new PascalTokenType1("DOWNTO") with Reserved
+  val ELSE 		= new PascalTokenType1("ELSE") with Reserved
+  val END 		= new PascalTokenType1("END") with Reserved
+  val FILE 		= new PascalTokenType1("FILE") with Reserved
+  val FOR 		= new PascalTokenType1("FOR") with Reserved
+  val FUNCTION 	= new PascalTokenType1("FUNCTION") with Reserved
+  val GOTO 		= new PascalTokenType1("GOTO") with Reserved
+  val IF 		= new PascalTokenType1("IF") with Reserved
+  val IN 		= new PascalTokenType1("IN") with Reserved
+  val LABEL 	= new PascalTokenType1("LABEL") with Reserved
+  val MOD	 	= new PascalTokenType1("MOD") with Reserved
+  val NIL 		= new PascalTokenType1("NIL") with Reserved
+  val NOT 		= new PascalTokenType1("NOT") with Reserved
+  val OF 		= new PascalTokenType1("OF") with Reserved
+  val OR 		= new PascalTokenType1("OR") with Reserved
+  val PACKED 	= new PascalTokenType1("PACKED") with Reserved
+  val PROCEDURE = new PascalTokenType1("PROCEDURE") with Reserved
+  val PROGRAM 	= new PascalTokenType1("PROGRAM") with Reserved
+  val RECORD 	= new PascalTokenType1("RECORD") with Reserved
+  val REPEAT 	= new PascalTokenType1("REPEAT") with Reserved
+  val SET 		= new PascalTokenType1("SET") with Reserved
+  val THEN 		= new PascalTokenType1("THEN") with Reserved
+  val TO 		= new PascalTokenType1("TO") with Reserved
+  val TYPE 		= new PascalTokenType1("TYPE") with Reserved
+  val UNTIL 	= new PascalTokenType1("UNTIL") with Reserved
+  val VAR 		= new PascalTokenType1("VAR") with Reserved
+  val WHILE 	= new PascalTokenType1("WHILE") with Reserved
+  val WITH 		= new PascalTokenType1("WITH") with Reserved
 
 // special
-case object PLUS extends PascalTokenType2("PLUS", "+") with Special
-case object MINUS extends PascalTokenType2("MINUS", "-") with Special
-case object STAR extends PascalTokenType2("STAR", "*") with Special
-case object SLASH extends PascalTokenType2("SLASH", "/") with Special
-case object COLON_EQUALS extends PascalTokenType2("COLON_EQUALS", ":=") with Special
-case object DOT extends PascalTokenType2("DOT", ".") with Special
-case object COMMA extends PascalTokenType2("COMMA", ",") with Special
-case object SEMICOLON extends PascalTokenType2("SEMICOLON", ";") with Special
-case object COLON extends PascalTokenType2("COLON", ":") with Special
-case object QUOTE extends PascalTokenType2("QUOTE", "'") with Special
-case object EQUALS extends PascalTokenType2("EQUALS", "=") with Special
-case object NOT_EQUALS extends PascalTokenType2("NOT_EQUALS", "<>") with Special
-case object LESS_THAN extends PascalTokenType2("LESS_THAN", "<") with Special
-case object LESS_EQUALS extends PascalTokenType2("LESS_EQUALS", "<=") with Special
-case object GREATER_THAN extends PascalTokenType2("GREATER_THAN", ">=") with Special
-case object GREATER_EQUALS extends PascalTokenType2("GREATER_EQUALS", ">") with Special
-case object LEFT_PAREN extends PascalTokenType2("LEFT_PAREN", "(") with Special
-case object RIGHT_PAREN extends PascalTokenType2("RIGHT_PAREN", ")") with Special
-case object LEFT_BRACKET extends PascalTokenType2("LEFT_BRACKET", "[") with Special
-case object RIGHT_BRACKET extends PascalTokenType2("RIGHT_BRACKET", "]") with Special
-case object LEFT_BRACE extends PascalTokenType2("LEFT_BRACE", "{") with Special
-case object RIGHT_BRACE extends PascalTokenType2("RIGHT_BRACE", "}") with Special
-case object UP_ARROW extends PascalTokenType2("UP_ARROW", "^") with Special
-case object DOT_DOT extends PascalTokenType2("DOT_DOT", "..") with Special
+  val PLUS 			 = new PascalTokenType2("PLUS", "+") with Special
+  val MINUS 		 = new PascalTokenType2("MINUS", "-") with Special
+  val STAR 			 = new PascalTokenType2("STAR", "*") with Special
+  val SLASH 		 = new PascalTokenType2("SLASH", "/") with Special
+  val COLON_EQUALS 	 = new PascalTokenType2("COLON_EQUALS", ":=") with Special
+  val DOT 			 = new PascalTokenType2("DOT", ".") with Special
+  val COMMA 		 = new PascalTokenType2("COMMA", ",") with Special
+  val SEMICOLON 	 = new PascalTokenType2("SEMICOLON", ";") with Special
+  val COLON 		 = new PascalTokenType2("COLON", ":") with Special
+  val QUOTE 		 = new PascalTokenType2("QUOTE", "'") with Special
+  val EQUALS 		 = new PascalTokenType2("EQUALS", "=") with Special
+  val NOT_EQUALS 	 = new PascalTokenType2("NOT_EQUALS", "<>") with Special
+  val LESS_THAN 	 = new PascalTokenType2("LESS_THAN", "<") with Special
+  val LESS_EQUALS 	 = new PascalTokenType2("LESS_EQUALS", "<=") with Special
+  val GREATER_THAN 	 = new PascalTokenType2("GREATER_THAN", ">=") with Special
+  val GREATER_EQUALS = new  PascalTokenType2("GREATER_EQUALS", ">") with Special
+  val LEFT_PAREN 	 = new PascalTokenType2("LEFT_PAREN", "(") with Special
+  val RIGHT_PAREN 	 = new PascalTokenType2("RIGHT_PAREN", ")") with Special
+  val LEFT_BRACKET 	 = new PascalTokenType2("LEFT_BRACKET", "[") with Special
+  val RIGHT_BRACKET  = new PascalTokenType2("RIGHT_BRACKET", "]") with Special
+  val LEFT_BRACE 	 = new PascalTokenType2("LEFT_BRACE", "{") with Special
+  val RIGHT_BRACE 	 = new PascalTokenType2("RIGHT_BRACE", "}") with Special
+  val UP_ARROW 		 = new PascalTokenType2("UP_ARROW", "^") with Special
+  val DOT_DOT 		 = new PascalTokenType2("DOT_DOT", "..") with Special
 
 // other
-case object IDENTIFIER extends PascalTokenType1("IDENTIFIER")
-case object INTEGER extends PascalTokenType1("INTEGER")
-case object REAL extends PascalTokenType1("REAL")
-case object STRING extends PascalTokenType1("STRING")
-case object ERROR extends PascalTokenType1("ERROR")
-case object END_OF_FILE extends PascalTokenType1("END_OF_FILE")
+  val IDENTIFIER 	= new PascalTokenType1("IDENTIFIER")
+  val INTEGER 		= new PascalTokenType1("INTEGER")
+  val REAL 			= new PascalTokenType1("REAL")
+  val STRING 		= new PascalTokenType1("STRING")
+  val ERROR 		= new PascalTokenType1("ERROR")
+  val END_OF_FILE 	= new PascalTokenType1("END_OF_FILE")
+}
 
