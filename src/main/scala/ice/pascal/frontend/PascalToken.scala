@@ -13,7 +13,7 @@ class PascalErrorToken(
     text: String) extends PascalToken(source) {
   
   lexeme_ = text
-  ttype_ = ERROR
+  ttype_ = tokens.ERROR
   tvalue_ = errorCode
   
   protected override def extract() {}
@@ -36,9 +36,9 @@ class PascalWordToken(source: Source) extends PascalToken(source) {
     lexeme_ = textBuffer.toString()
     
     // is it a reserved word or an identifier ?
-    ttype_ = if (ReservedToken.contains(lexeme_.toLowerCase())) {
+    ttype_ = if (ReservedToken.contains(lexeme_.toUpperCase())) {
       ReservedToken.valueOf(lexeme_.toUpperCase())
-    } else IDENTIFIER
+    } else tokens.IDENTIFIER
   }
 }
 
@@ -78,10 +78,10 @@ class PascalStringToken(source: Source) extends PascalToken(source) {
     if (current == '\'') {
       source.nextChar() // consume final quote
       textBuffer += '\''
-      ttype_ = STRING
+      ttype_ = tokens.STRING
       tvalue_ = valueBuffer.toString()
     } else {
-      ttype_ = ERROR
+      ttype_ = tokens.ERROR
       tvalue_ = error.UNEXPECTED_EOF
     }
     lexeme_ = textBuffer.toString()
@@ -120,9 +120,15 @@ class PascalSpecialSymbolToken(source: Source) extends PascalToken(source) {
         textBuffer += current
         source.nextChar() // consume '='
       }
+    } else if (current == '.') {
+      current = source.nextChar() // consume '.'
+      if (current == '.') {
+        textBuffer += current
+        source.nextChar()
+      }
     } else {
       source.nextChar() // consume bad character
-      ttype_ = ERROR
+      ttype_ = tokens.ERROR
       tvalue_ = error.INVALID_CHARACTER
     }
     
@@ -148,11 +154,11 @@ class PascalNumberToken(source: Source) extends PascalToken(source) {
     var exponentDigits: String = null
     var exponentSign = '+'
     var sawDotDot = false
-    ttype_ = INTEGER // assume INTEGER token type for now
+    ttype_ = tokens.INTEGER // assume INTEGER token type for now
     
     // extract the digits of the whole part of the number
     wholeDigits = unsignedIntegerDigits(textBuffer)
-    if (ttype_ == ERROR) {
+    if (ttype_ == tokens.ERROR) {
       return
     }
     
@@ -163,13 +169,13 @@ class PascalNumberToken(source: Source) extends PascalToken(source) {
       if (source.peekChar() == '.') {
         sawDotDot = true // it's a ".." token, so don't consume it
       } else {
-        ttype_ = REAL // decimal point, so token is REAL
+        ttype_ = tokens.REAL // decimal point, so token is REAL
         textBuffer += current
         current = source.nextChar() // consume decimal point
         
         // collect the digits of the fraction part of the number,
         fractionDigits = unsignedIntegerDigits(textBuffer)
-        if (ttype_ == ERROR) {
+        if (ttype_ == tokens.ERROR) {
           return
         }
       }
@@ -179,7 +185,7 @@ class PascalNumberToken(source: Source) extends PascalToken(source) {
     // there cannot be an exponent part if we already saw a ".." token
     current = source.currentChar()
     if (!sawDotDot && (current == 'E' || current == 'e')) {
-      ttype_ = REAL // exponent, so token type is REAL
+      ttype_ = tokens.REAL // exponent, so token type is REAL
       textBuffer += current
       current = source.nextChar() // consume 'E' or 'e'
       
@@ -195,14 +201,14 @@ class PascalNumberToken(source: Source) extends PascalToken(source) {
     }
     
     // compute the value of an integer number token
-    if (ttype_ == INTEGER) {
+    if (ttype_ == tokens.INTEGER) {
       val integerValue: java.lang.Integer = computeIntegerValue(wholeDigits)
-      if (ttype_ != ERROR) {
+      if (ttype_ != tokens.ERROR) {
         tvalue_ = integerValue
       }
-    } else if (ttype_ == REAL) {
+    } else if (ttype_ == tokens.REAL) {
       val floatValue: java.lang.Double = computeFloatValue(wholeDigits, fractionDigits, exponentDigits, exponentSign)
-      if (ttype_ != ERROR) {
+      if (ttype_ != tokens.ERROR) {
         tvalue_ = floatValue
       }
     }
@@ -212,7 +218,7 @@ class PascalNumberToken(source: Source) extends PascalToken(source) {
     var current = source.currentChar()
     // must have at least one digit
     if (!current.isDigit) {
-      ttype_ = ERROR
+      ttype_ = tokens.ERROR
       tvalue_ = error.INVALID_NUMBER
       return null
     }
@@ -248,7 +254,7 @@ class PascalNumberToken(source: Source) extends PascalToken(source) {
     if (integerValue >= prevValue) {
       return integerValue
     } else {
-      ttype_ = ERROR
+      ttype_ = tokens.ERROR
       tvalue_ = error.RANGE_INTEGER
       return 0
     }
@@ -273,7 +279,7 @@ class PascalNumberToken(source: Source) extends PascalToken(source) {
     
     // check for a real number out of range error
     if (abs(exponentValue + wholeDigits.size) > java.lang.Double.MAX_EXPONENT) {
-      ttype_ = ERROR
+      ttype_ = tokens.ERROR
       tvalue_ = error.RANGE_REAL
       return 0.0
     }
