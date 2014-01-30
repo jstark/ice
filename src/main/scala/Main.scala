@@ -3,7 +3,7 @@ import ice.frontend._
 import ice.intermediate._
 import ice.backend._
 import scopt.OptionParser
-import ice.pascal.frontend.{PascalParser, PascalScanner}
+import ice.pascal.frontend._
 
 /** scopt config */
 case class Config(action: String = "compile", file: String = "")
@@ -56,6 +56,35 @@ object ParserMessageListener extends MessageListener {
       println(f"\n$stmtCount%,20d source lines.")
       println(f"$errors%,20d syntax errors.")
       println(f"$time%,20.2f seconds total parsing time.\n")
+    } else if (mtype == MessageType.TOKEN) {
+      val (ln, pos, tp, txt, vl) = message.args.asInstanceOf[(Int, Int, TokenType, String, AnyRef)]
+      println(f">>> $tp%-15s line=$ln%03d, pos=$pos%2d, text=\042$txt%s\042")
+      if (vl != null) {
+        var tval = vl
+        if (tp == tokens.STRING) {
+          tval = "\"" + vl + "\""
+        }
+        println(f">>>                       value=$tval%s")
+      }
+    } else if (mtype == MessageType.SYNTAX_ERROR) {
+      val PREFIX_WIDTH = 5
+      val (ln, pos, txt, msg) = message.args.asInstanceOf[(Int, Int, String, String)]
+      val spaceCount = PREFIX_WIDTH + pos
+      val flagBuffer = new StringBuilder()
+      
+      // spaces up to the error position
+      for (i <- 1 to spaceCount-1) {
+        flagBuffer += ' '
+      }
+      
+      // a pointer to the error followed by  the error message
+      flagBuffer.append("^\n*** ").append(msg)
+      
+      // text, if any of the bad token
+      if (txt != null) {
+        flagBuffer.append(" [at \"").append(txt).append("\"]")
+      }
+      println(flagBuffer.toString())
     }
   }
 }
