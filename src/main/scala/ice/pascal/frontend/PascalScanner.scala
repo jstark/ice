@@ -3,6 +3,7 @@ package ice.pascal.frontend
 import ice.frontend.{Source, Scanner, Token, EofToken}
 
 class PascalScanner(source: Source) extends Scanner(source) {
+
   def extractToken() = {
     skipWhitespace()
     val current = source.currentChar()
@@ -35,6 +36,11 @@ class PascalScanner(source: Source) extends Scanner(source) {
         do {
           current = source.nextChar() // consume comment
         } while (current != '}' && current != Source.EndOfFile)
+          
+        // found closing '}' ?
+        if (current == '}') {
+          current = source.nextChar()
+        }
       } else {
         current = source.nextChar()
       }
