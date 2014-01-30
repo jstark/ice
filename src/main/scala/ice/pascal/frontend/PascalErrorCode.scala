@@ -1,6 +1,8 @@
 package ice.pascal.frontend
 
-class PascalErrorCode(val message: String, val status: Int)
+class PascalErrorCode(val message: String, val status: Int) {
+  override def toString = message
+}
 
 object PascalErrorCode {
   private var status_ = 0

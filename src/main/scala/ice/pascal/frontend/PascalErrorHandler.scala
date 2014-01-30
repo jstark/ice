@@ -8,7 +8,7 @@ object PascalErrorHandler {
   private var errorCount_ = 0 // syntax errors
   
   def flag(token: Token, errorCode: PascalErrorCode, parser: Parser) {
-    val m = new Message(MessageType.SYNTAX_ERROR, (token.position, token.lexeme, errorCode.toString))
+    val m = new Message(MessageType.SYNTAX_ERROR, (token.lineNumber, token.position, token.lexeme, errorCode.toString))
     parser.sendMessage(m)
     
     // abort if too many errors
@@ -20,7 +20,7 @@ object PascalErrorHandler {
   }
   
   def abortTranslation(errorCode: PascalErrorCode, parser: Parser) {
-    val fatalText = "FATAL ERROR: " + errorCode.toString
+    val fatalText = "FATAL ERROR: " + errorCode.toString()
     parser.sendMessage(new Message(MessageType.SYNTAX_ERROR, (0, 0, "", fatalText)))
     System.exit(errorCode.status)
   }
