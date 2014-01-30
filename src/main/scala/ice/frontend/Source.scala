@@ -58,7 +58,7 @@ class Source(reader: BufferedSource) extends MessageProducer {
   
   private def readNextLine() {
     lineText_ = if (lineIterator_.hasNext) lineIterator_.next else null
-    currentPosition_ += 1
+    currentPosition_ = READ_NEXT_LINE
     if (lineText_ != null) {
       currentLine_ += 1
       
