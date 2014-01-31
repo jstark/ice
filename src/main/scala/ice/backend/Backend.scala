@@ -1,18 +1,18 @@
 package ice.backend
 
 import ice.message._
-import ice.intermediate.SymbolTable
+import ice.intermediate.SymTab
 import ice.intermediate.ICode
 
 abstract class Backend extends MessageProducer {
-  def process(icode: ICode, symbolTable: SymbolTable)
+  def process(icode: ICode, symbolTable: SymTab)
 }
 
 /*
  * compiler
  */
 class CodeGenerator extends Backend {
-  def process(icode: ICode, symbolTable: SymbolTable) {
+  def process(icode: ICode, symbolTable: SymTab) {
     val start = System.currentTimeMillis
     val elapsedTime = (System.currentTimeMillis - start)/1000.0f
     val instructionCount = 0
@@ -26,7 +26,7 @@ class CodeGenerator extends Backend {
  * interpreter
  */
 class Executor extends Backend {
-  def process(icode: ICode, symbolTable: SymbolTable) {
+  def process(icode: ICode, symbolTable: SymTab) {
     val start = System.currentTimeMillis
     val elapsedTime = (System.currentTimeMillis - start)/1000.0f
     val executionCount = 0
