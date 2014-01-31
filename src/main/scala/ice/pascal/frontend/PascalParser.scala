@@ -13,10 +13,18 @@ class PascalParser(scanner: PascalScanner) extends Parser(scanner) {
       val start = System.currentTimeMillis
       var token = nextToken()
       while (!token.isInstanceOf[EofToken]) {
-        if (token.ttype != tokens.ERROR) {
-          val args = (token.lineNumber, token.position, token.ttype, token.lexeme, token.tvalue)
-          val m = new Message(MessageType.TOKEN, args)
-          sendMessage(m)
+        if (token.ttype == tokens.IDENTIFIER) {
+          val name = token.lexeme.toLowerCase()
+
+          // if it's not already in the symbol table,
+          // create and enter a new entry for the identifier.
+          var entry = symTabStack.lookup(name)
+          if (entry == null) {
+            entry = symTabStack.enterLocal(name)
+          }
+
+          // append the current line number to the entry
+          entry.appendLineNumber(token.lineNumber)
         } else {
           PascalErrorHandler.flag(token, token.tvalue.asInstanceOf[PascalErrorCode], this)
         }
