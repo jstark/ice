@@ -25,7 +25,7 @@ class PascalParser(scanner: PascalScanner) extends Parser(scanner) {
 
           // append the current line number to the entry
           entry.appendLineNumber(token.lineNumber)
-        } else {
+        } else if (token.ttype == tokens.ERROR) {
           PascalErrorHandler.flag(token, token.tvalue.asInstanceOf[PascalErrorCode], this)
         }
         token = nextToken()
@@ -38,7 +38,7 @@ class PascalParser(scanner: PascalScanner) extends Parser(scanner) {
     } catch {
       case _: Throwable => PascalErrorHandler.abortTranslation(error.IO_ERROR, this)
     }
-    (null, null)
+    (null, symTabStack)
   }
   
   def errorCount = 0
