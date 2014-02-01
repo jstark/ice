@@ -47,7 +47,7 @@ private class SymTabImpl(override val nestingLevel: Int) extends SymTab {
    * @param name the name of the entry.
    * @return the entry, or null if it does not exist.
    */
-  override def lookup(name: String): SymTabEntry = entries(name)
+  override def lookup(name: String): SymTabEntry = entries.getOrElse(name, null)
 
   /**
    * @return a list of symbol table entries sorted by name.
