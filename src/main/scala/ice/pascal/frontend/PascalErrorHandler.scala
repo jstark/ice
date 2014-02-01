@@ -6,6 +6,8 @@ import ice.message._
 object PascalErrorHandler {
   private val MAX_ERRORS = 25
   private var errorCount_ = 0 // syntax errors
+
+  def errorCount = errorCount_
   
   def flag(token: Token, errorCode: PascalErrorCode, parser: Parser) {
     val m = new Message(MessageType.SYNTAX_ERROR, (token.lineNumber, token.position, token.lexeme, errorCode.toString))

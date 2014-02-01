@@ -6,6 +6,8 @@ import ice.message.{Message, MessageType}
 class PascalParser(scanner: PascalScanner) extends Parser(scanner) {
 
   tokens.init()
+
+  def errorCount = PascalErrorHandler.errorCount
   
   def parse() = {
     try
@@ -40,6 +42,4 @@ class PascalParser(scanner: PascalScanner) extends Parser(scanner) {
     }
     (null, symTabStack)
   }
-  
-  def errorCount = 0
 }
