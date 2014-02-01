@@ -6,3 +6,7 @@ libraryDependencies += "com.github.scopt" %% "scopt" % "3.2.0"
 
 resolvers += Resolver.sonatypeRepo("public")
 
+seq(com.github.retronym.SbtOneJar.oneJarSettings: _*)
+
+libraryDependencies += "commons-lang" % "commons-lang" % "2.6"
+

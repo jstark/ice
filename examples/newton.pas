@@ -3,7 +3,7 @@ PROGRAM newton (input, output);
 CONST
     EPSILON = 1e-6;
 
-VAR
+VAR$
     number      : integer;
     root, sqRoot: real;
 
