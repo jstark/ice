@@ -44,6 +44,8 @@ trait SymTabStack {
 private class SymTabStackImpl extends SymTabStack {
 
   val symbolTables = new mutable.Stack[SymTab]()
+  symbolTables.push(SymTab.createTable(nestingLevel))
+
   /**
    * Getter
    * @return the current nesting level
