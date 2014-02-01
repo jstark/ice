@@ -6,7 +6,7 @@ import scopt.OptionParser
 import ice.pascal.frontend._
 
 /** scopt config */
-case class Config(action: String = "compile", file: String = "")
+case class Config(action: String = "compile", xref: Boolean = true, file: String = "")
 
 /**
  * Created by john on 1/18/14.
@@ -15,6 +15,7 @@ object Main extends App {
   val cmdOptions = new OptionParser[Config]("ice") {
     head("ice", "0.1")
     opt[String]('a', "action") action { (x, c) => c.copy(action=x) }
+    opt[Unit]('x', "xref") action { (_, c) => c.copy(xref=true)}
     opt[String]('f', "file"  ) action { (x, c) => c.copy(file=x)   } required()
     help("help") text("prints this usage text")
   }
@@ -32,9 +33,12 @@ object Main extends App {
     val backend = if (config.action == "compile") new CodeGenerator else new Executor
     backend.addMessageListener(BackendMessageListener)
     
-    val (icode, symtab) = parser.parse()
-    
-    backend.process(icode, symtab)
+    val (icode, symtabstack) = parser.parse()
+
+    if (config.xref == true) {
+      CrossReferencer.print(symtabstack)
+    }
+    backend.process(icode, symtabstack)
   }
 }
 
