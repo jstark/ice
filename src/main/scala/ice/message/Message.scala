@@ -18,12 +18,12 @@ trait MessageProducer {
   private var listeners = ArrayBuffer[MessageListener]()
   
   def addMessageListener(listener: MessageListener) {
-    require(listeners.contains(listener) == false)
+    require(!listeners.contains(listener))
     listeners += listener
   }
   
   def removeMessageListener(listener: MessageListener) {
-    require(listeners.contains(listener) == true) 
+    require(listeners.contains(listener))
     listeners -= listener
   }
   

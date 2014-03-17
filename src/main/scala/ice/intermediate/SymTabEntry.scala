@@ -2,6 +2,7 @@ package ice.intermediate
 
 import SymTabKey._
 import scala.collection.mutable.{HashMap, ArrayBuffer}
+import scala.collection.mutable
 
 /**
  * Created by john on 1/31/14.
@@ -50,7 +51,7 @@ trait SymTabEntry {
  * @param symbolTable the symbol table that contains the entry.
  */
 private class SymTabEntryImpl(override val name: String, override val symbolTable: SymTab) extends SymTabEntry {
-  val entries = new HashMap[SymTabKey, AnyRef]()
+  val entries = new mutable.HashMap[SymTabKey, AnyRef]()
   val lineNumbers_ = new ArrayBuffer[Int]()
 
   /**

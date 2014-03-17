@@ -24,7 +24,7 @@ class PascalErrorToken(
 class PascalWordToken(source: Source) extends PascalToken(source) {
   
   protected override def extract() {
-    val textBuffer = new StringBuilder()
+    val textBuffer = new mutable.StringBuilder()
     var current = source.currentChar()
     // Get the word characters (letter or digit). The scanner has
     // already determined that the first character is a letter.
@@ -45,8 +45,8 @@ class PascalWordToken(source: Source) extends PascalToken(source) {
 class PascalStringToken(source: Source) extends PascalToken(source) {
   
   protected override def extract() {
-    val textBuffer = new StringBuilder()
-    val valueBuffer= new StringBuilder()
+    val textBuffer = new mutable.StringBuilder()
+    val valueBuffer= new mutable.StringBuilder()
     
     var current = source.nextChar() // consume initial quote
     textBuffer += '\''
@@ -91,7 +91,7 @@ class PascalStringToken(source: Source) extends PascalToken(source) {
 class PascalSpecialSymbolToken(source: Source) extends PascalToken(source) {
   
   protected override def extract() {
-    val textBuffer = new StringBuilder()
+    val textBuffer = new mutable.StringBuilder()
     val single = "+-*/,;'=()[]{}^".toList
     var current = source.currentChar()
     textBuffer += current
@@ -143,12 +143,12 @@ class PascalSpecialSymbolToken(source: Source) extends PascalToken(source) {
 class PascalNumberToken(source: Source) extends PascalToken(source) {
   
   protected override def extract() {
-    val textBuffer = new StringBuilder()
+    val textBuffer = new mutable.StringBuilder()
     extractNumber(textBuffer)
     lexeme_ = textBuffer.toString()
   }
   
-  private def extractNumber(textBuffer: StringBuilder) {
+  private def extractNumber(textBuffer: mutable.StringBuilder) {
     var wholeDigits: String = null
     var fractionDigits: String = null
     var exponentDigits: String = null
@@ -214,7 +214,7 @@ class PascalNumberToken(source: Source) extends PascalToken(source) {
     }
   }
   
-  private def unsignedIntegerDigits(textBuffer: StringBuilder): String = {
+  private def unsignedIntegerDigits(textBuffer: mutable.StringBuilder): String = {
     var current = source.currentChar()
     // must have at least one digit
     if (!current.isDigit) {

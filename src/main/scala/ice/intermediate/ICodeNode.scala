@@ -4,6 +4,7 @@ import scala.collection.mutable.ArrayBuffer
 import scala.collection.mutable.HashMap
 import ICodeNodeType._
 import ICodeKey._
+import scala.collection.mutable
 
 /**
  * Created by john on 2/2/14.
@@ -62,7 +63,7 @@ trait ICodeNode {
 private class ICodeNodeImpl(override val nodeType: ICodeNodeType) extends ICodeNode {
 
   private val children_ = new ArrayBuffer[ICodeNode]()
-  private val attributes_ = new HashMap[ICodeKey, AnyRef]()
+  private val attributes_ = new mutable.HashMap[ICodeKey, AnyRef]()
 
   override var parent: ICodeNode = _
 

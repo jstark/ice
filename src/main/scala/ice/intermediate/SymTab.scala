@@ -1,6 +1,7 @@
 package ice.intermediate
 
 import scala.collection.mutable.HashMap
+import scala.collection.mutable
 
 trait SymTab {
   /**
@@ -30,7 +31,7 @@ trait SymTab {
 }
 
 private class SymTabImpl(override val nestingLevel: Int) extends SymTab {
-  val entries = new HashMap[String, SymTabEntry]
+  val entries = new mutable.HashMap[String, SymTabEntry]
   /**
    * Create and enter a new entry into the symbol table.
    * @param name the name of the entry.

@@ -2,6 +2,7 @@ package ice.pascal.frontend
 
 import scala.collection.mutable.{ArrayBuffer, HashSet, HashMap}
 import ice.frontend.TokenType
+import scala.collection.mutable
 
 trait  Reserved { self: TokenType =>
   val name: String
@@ -9,7 +10,7 @@ trait  Reserved { self: TokenType =>
 }
 
 object ReservedToken {
-  private var reserved_ = new HashMap[String, TokenType]
+  private var reserved_ = new mutable.HashMap[String, TokenType]
   def append(tokenName: String, tokenType: TokenType) = {
     reserved_ += (tokenName -> tokenType)
   }
@@ -23,7 +24,7 @@ trait Special { self: TokenType =>
 }
 
 object SpecialToken {
-    private var special_ = new HashMap[String, TokenType]
+    private var special_ = new mutable.HashMap[String, TokenType]
     def append(tokenName: String, tokenType: TokenType) = {
       special_ += (tokenName -> tokenType)
     }

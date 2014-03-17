@@ -12,7 +12,7 @@ class ParseTreePrinter(ps: PrintStream) {
 
   private var length_ = 0
   private var indentation_ = ""
-  private var indent_ = (1 to INDENT_WIDTH) map ( _ => " ") mkString
+  private var indent_ = ((1 to INDENT_WIDTH) map (_ => " ")).mkString
   private val line_ = new StringBuilder()
 
 
@@ -48,7 +48,7 @@ class ParseTreePrinter(ps: PrintStream) {
     } else value.toString()
 
     val text = keyString.toLowerCase() + "=\"" + valueString + "\""
-    append(" "); append(text);
+    append(" "); append(text)
 
     // include and identifier's nesting level.
     if (isSymTabEntry) {

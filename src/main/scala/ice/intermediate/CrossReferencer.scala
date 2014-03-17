@@ -40,7 +40,7 @@ object CrossReferencer {
     for (entry <- sorted) {
       val lineNumbers = entry.lineNumbers
       System.out.print(NAME_FORMAT.format(entry.name))
-      for (number <- lineNumbers) System.out.print((NUMBER_FORMAT).format(number))
+      for (number <- lineNumbers) System.out.print(NUMBER_FORMAT.format(number))
       println()
     }
   }

@@ -17,7 +17,7 @@ object Main extends App {
     opt[String]('a', "action") action { (x, c) => c.copy(action=x) }
     opt[Unit]('x', "xref") action { (_, c) => c.copy(xref=true)}
     opt[String]('f', "file"  ) action { (x, c) => c.copy(file=x)   } required()
-    help("help") text("prints this usage text")
+    help("help") text "prints this usage text"
   }
   
   // parser returns Option[C]
@@ -35,7 +35,7 @@ object Main extends App {
     
     val (icode, symtabstack) = parser.parse()
 
-    if (config.xref == true) {
+    if (config.xref) {
       CrossReferencer.print(symtabstack)
     }
     backend.process(icode, symtabstack)
