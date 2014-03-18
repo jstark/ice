@@ -9,21 +9,21 @@ object PascalErrorHandler {
 
   def errorCount = errorCount_
   
-  def flag(token: Token, errorCode: PascalErrorCode, parser: Parser) {
+  def flag(token: Token, errorCode: PascalErrorCode, mp: MessageProducer) {
     val m = new Message(MessageType.SYNTAX_ERROR, (token.lineNumber, token.position, token.lexeme, errorCode.toString))
-    parser.sendMessage(m)
+    mp.sendMessage(m)
     
     // abort if too many errors
     errorCount_ += 1
     if (errorCount_ > MAX_ERRORS) {
       import error.TOO_MANY_ERRORS
-      abortTranslation(TOO_MANY_ERRORS, parser)
+      abortTranslation(TOO_MANY_ERRORS, mp)
     }
   }
   
-  def abortTranslation(errorCode: PascalErrorCode, parser: Parser) {
+  def abortTranslation(errorCode: PascalErrorCode, mp: MessageProducer) {
     val fatalText = "FATAL ERROR: " + errorCode.toString()
-    parser.sendMessage(new Message(MessageType.SYNTAX_ERROR, (0, 0, "", fatalText)))
+    mp.sendMessage(new Message(MessageType.SYNTAX_ERROR, (0, 0, "", fatalText)))
     System.exit(errorCode.status)
   }
 }
