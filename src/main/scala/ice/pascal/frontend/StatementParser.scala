@@ -1,14 +1,13 @@
 package ice.pascal.frontend
 
-import ice.message.MessageProducer
+import ice.message.{MessageListener, MessageProducer}
 import ice.intermediate._
 import ice.frontend.{EofToken, TokenType, Token}
-import scala.collection.concurrent.RDCSS_Descriptor
 
 /**
  * Created by john on 3/18/14.
  */
-class StatementParser(scanner: PascalScanner, symtabstack: SymTabStack) extends MessageProducer {
+class StatementParser private(scanner: PascalScanner, symtabstack: SymTabStack) extends MessageProducer {
   def parse(token: Token): ICodeNode = {
     val node = token.ttype match {
       case tokens.BEGIN =>
@@ -51,5 +50,13 @@ class StatementParser(scanner: PascalScanner, symtabstack: SymTabStack) extends 
 
   private def setLineNumber(node: ICodeNode, line: Int) {
     node.setAttribute(ICodeKey.LINE, new Integer(line))
+  }
+}
+
+object StatementParser {
+  def apply(scanner: PascalScanner, stack: SymTabStack, listeners: Seq[MessageListener]) = {
+    val sp = new StatementParser(scanner, stack)
+    listeners foreach (sp addMessageListener _)
+    sp
   }
 }
