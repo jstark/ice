@@ -11,10 +11,10 @@ class StatementParser private(scanner: PascalScanner, symtabstack: SymTabStack) 
   def parse(token: Token): ICodeNode = {
     val node = token.ttype match {
       case tokens.BEGIN =>
-        val compound_parser = new CompoundStatementParser
+        val compound_parser = CompoundStatementParser(scanner, symtabstack, listeners)
         compound_parser.parse(token)
       case tokens.IDENTIFIER =>
-        val assignment_parser = new AssignmentParser
+        val assignment_parser = AssignmentParser(scanner, symtabstack, listeners)
         assignment_parser.parse(token)
       case _ => ICode.createICodeNode(ICodeNodeType.NO_OP)
     }
@@ -56,7 +56,7 @@ class StatementParser private(scanner: PascalScanner, symtabstack: SymTabStack) 
 object StatementParser {
   def apply(scanner: PascalScanner, stack: SymTabStack, listeners: Seq[MessageListener]) = {
     val sp = new StatementParser(scanner, stack)
-    listeners foreach (sp addMessageListener _)
+    sp.listeners ++= listeners
     sp
   }
 }
