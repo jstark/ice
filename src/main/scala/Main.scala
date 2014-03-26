@@ -2,11 +2,16 @@ import ice.message._
 import ice.frontend._
 import ice.intermediate._
 import ice.backend._
+import ice.utils.ParseTreePrinter
 import scopt.OptionParser
 import ice.pascal.frontend._
 
 /** scopt config */
-case class Config(action: String = "compile", xref: Boolean = true, file: String = "")
+case class Config(
+  action: String = "compile",
+  xref: Boolean = true,
+  print_tree: Boolean = false,
+  file: String = "")
 
 /**
  * Created by john on 1/18/14.
@@ -16,6 +21,7 @@ object Main extends App {
     head("ice", "0.1")
     opt[String]('a', "action") action { (x, c) => c.copy(action=x) }
     opt[Unit]('x', "xref") action { (_, c) => c.copy(xref=true)}
+    opt[Unit]('i', "intermediate") action { (_, c) => c.copy(print_tree = true)}
     opt[String]('f', "file"  ) action { (x, c) => c.copy(file=x)   } required()
     help("help") text "prints this usage text"
   }
@@ -37,6 +43,10 @@ object Main extends App {
 
     if (config.xref) {
       CrossReferencer.print(symtabstack)
+    }
+    if (config.print_tree && (icode.root != null)) {
+      val printer = new ParseTreePrinter(System.out)
+      printer.print(icode)
     }
     backend.process(icode, symtabstack)
   }
