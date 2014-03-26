@@ -15,7 +15,7 @@ trait MessageListener {
 }
 
 trait MessageProducer {
-  private var listeners = ArrayBuffer[MessageListener]()
+  val listeners = ArrayBuffer[MessageListener]()
   
   def addMessageListener(listener: MessageListener) {
     require(!listeners.contains(listener))
