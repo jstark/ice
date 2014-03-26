@@ -16,7 +16,7 @@ class ParseTreePrinter(ps: PrintStream) {
   private val line_ = new StringBuilder()
 
 
-  private def print(icode: ICode) {
+  def print(icode: ICode) {
     ps.println("\n===== INTERMEDIATE CODE =====\n")
 
     printNode(icode.root)
