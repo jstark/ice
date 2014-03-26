@@ -37,4 +37,6 @@ private class ICodeImpl extends ICode {
 
 object ICode {
   def createICodeNode(nodeType: ICodeNodeType): ICodeNode = new ICodeNodeImpl(nodeType)
+  def createICode(): ICode = new ICodeImpl()
 }
+
